@@ -4,7 +4,7 @@
 		
 		?>
 		
-		<nav>
+		<nav class="blue">
 		
 			<ul>
 			
@@ -23,7 +23,13 @@
 	
 		?>
 		
-		
+		<!-- Compiled and minified CSS -->
+		<link rel="stylesheet" href="materialize/css/materialize.min.css">
+		<link rel="stylesheet" href="nouislider/nouislider.css">
+
+		<!-- Compiled and minified JavaScript -->
+		<script src="materialize/js/materialize.min.js"></script>
+		<script src="nouislider/nouislider.js"></script>
 		
 		<?php
 	
@@ -32,9 +38,18 @@
 	function filtros(){
 	
 		?>
-		
-		
-		
+		<form>
+			<div class="row">
+				<div class="col s3">
+					<div class="row">
+						<div class="input-field col s12">
+							<h5 class="text-center">Taxa de aprovação</h5>
+							<div id="range-aprovados"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
 		<?php
 	
 	}
@@ -120,21 +135,29 @@
 		
 		$resul = [];
 		
-		$cidades = '(';
-		
-		foreach($filtros['municipio'] as $i=>$v) {
-			if($i==0) {
-				$cidades.="$v";
-			} else {
-				$cidades.=",$v";
+		if(isset($filtros['municipio'])) {
+			$cidades = '(';
+			
+			foreach($filtros['municipio'] as $i=>$v) {
+				if($i==0) {
+					$cidades.="$v";
+				} else {
+					$cidades.=",$v";
+				}
 			}
 		}
 		
 		$cidades.=')';
 		
 		foreach($dados as $i=>$v) {
-			$dataT = "SELECT count(*) as 'total' FROM escolas WHERE Cod_Municipio IN ".$cidades;
-			$dataS = "SELECT count(*) as 'cont' FROM escolas WHERE Cod_Municipio IN ".$cidades." AND ".$v." LIKE '%S%';";
+			$where = '';
+			
+			if(isset($filtros['municipio'])) {
+				$where .= "Cod_Municipio IN ".$cidades;
+			}
+			
+			$dataT = "SELECT count(*) as 'total' FROM escolas WHERE $where";
+			$dataS = "SELECT count(*) as 'cont' FROM escolas WHERE $where AND ".$v." LIKE '%S%';";
 		
 			$resultadoT = mysqli_query($link, $dataT);
 			$resultadoS = mysqli_query($link, $dataS);
@@ -146,9 +169,9 @@
 		
 		$data = "SELECT * FROM tx_rendimento WHERE Cod_Municipio IN ".$cidades;
 		
-		$resultado = mysqli_query($link, $data);
-		$aprovados = mysqli_fetch_array($resultado)['ap_ef']; // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-		$resul["Aprovados"] = $aprovados;
+		//$resultado = mysqli_query($link, $data);
+		//$aprovados = mysqli_fetch_array($resultado)['ap_ef'];
+		//$resul["Aprovados"] = $aprovados;
 		
 		
 		$json = json_encode($resul);

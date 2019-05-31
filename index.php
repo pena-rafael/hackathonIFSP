@@ -18,6 +18,8 @@
 		<?php bibliotecas(); ?>
 		
 		<?php head_chart(); ?>
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	
 	</head>
 	
@@ -26,10 +28,10 @@
 		<?php
 		
 			links();
-			
-			body_chart();
 		
 			filtros();
+			
+			body_chart();
 		
 		?>
 	

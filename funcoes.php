@@ -134,6 +134,13 @@
 			$resul[$v] = $porcentagem;
 		}
 		
+		$data = "SELECT * FROM tx_rendimento WHERE Cod_Municipio IN ".$cidades;
+		
+		$resultado = mysqli_query($link, $data);
+		$aprovados = mysqli_fetch_array($resultado)['ap_ef']; // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+		$resul["Aprovados"] = $aprovados;
+		
+		
 		$json = json_encode($resul);
 		
 		return $json;

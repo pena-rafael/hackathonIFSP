@@ -15,6 +15,26 @@
 			});
 			var dados =[['Tipo', 'Porcentagem']];
 			$(document).ready(function() {
+				$("#aplicar_tx").click(function() {
+					var tx_min = slider.noUiSlider.get()[0];
+					var tx_max = slider.noUiSlider.get()[1];
+					var estados = $("#estados").val();
+					var request = $.ajax({
+						url: "dados.php",
+						method: "POST",
+						dataType: "json",
+						data: {tx_min: tx_min, tx_max: tx_max, estados: estados},
+						success: function(data) {
+							var keys = Object.keys(data);
+							var values = Object.values(data);
+							for(var i=0; i<keys.length;i++) {
+								dados[i+1] = [keys[i], values[i]];
+							}
+							google.charts.setOnLoadCallback(drawVisualization);
+						}
+					});
+				});
+				
 				var slider = document.getElementById('range-aprovados');
 				noUiSlider.create(slider, {
 					start: [0, 100],

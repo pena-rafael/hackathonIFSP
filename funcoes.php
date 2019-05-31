@@ -47,7 +47,7 @@
 			</div>
 			<div class="row">
 				<div class="input-field col s12">
-					<select multiple>
+					<select id="estados" name="estados[]" multiple>
 						<option value="" disabled>Selecione estado(s)</option>
 						<option value="AC">Acre</option>
 						<option value="AL">Alagoas</option>
@@ -175,42 +175,45 @@
 			$filtros['tx_min'] = 0;
 			$filtros['tx_max'] = 100;
 		}
-		$estados = '(';
 		if(isset($filtros['estados'])) {
+			$estados = '(';
 			
 			foreach($filtros['estados'] as $i=>$v) {
 				if($i==0) {
-					$estados.="$v";
+					$estados.="'$v'";
 				} else {
-					$estados.=",$v";
+					$estados.=",'$v'";
 				}
 			}
+			
+			$estados.=')';
 		}
-		$estados.=')';
 		
-		
-		$sql_tx = "SELECT avg(ap_ef) FROM tx_rendimento WHERE UF IN $estados";
+		if(isset($estados)) {
+			$sql_tx = "SELECT * FROM tx_rendimento WHERE UF IN $estados AND ap_ef BETWEEN ".$filtros['tx_min']." AND ".$filtros['tx_max'];
+		} else {
+			$sql_tx = "SELECT * FROM tx_rendimento WHERE ap_ef BETWEEN ".$filtros['tx_min']." AND ".$filtros['tx_max'];
+		}
+		//echo $sql_tx;
 		$resultado_tx = mysqli_query($link, $sql_tx);
 		
+		$cidades = '(';
 		
-		if(isset($filtros['municipio'])) {
-			$cidades = '(';
-			
-			foreach($filtros['municipio'] as $i=>$v) {
-				if($i==0) {
-					$cidades.="$v";
-				} else {
-					$cidades.=",$v";
-				}
+		foreach($resultado_tx as $i=>$v) {
+			$cidade = $v['cod_mun'];
+			if($i==0) {
+				$cidades.="$cidade";
+			} else {
+				$cidades.=",$cidade";
 			}
-		
-			$cidades.=')';
 		}
+	
+		$cidades.=')';
 		
 		foreach($dados as $i=>$v) {
 			$where = '';
 			
-			if(isset($filtros['municipio'])) {
+			if(isset($cidades)) {
 				$where .= "Cod_Municipio IN ".$cidades;
 			}
 			

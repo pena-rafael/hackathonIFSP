@@ -1,6 +1,6 @@
 <?php
 
-	$banco = "hackatonIFSP";
+	$banco = "hackathonifsp";
 	$user = "root";
 	$senha = "";
 	$host = "localhost";

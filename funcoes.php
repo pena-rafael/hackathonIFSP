@@ -18,5 +18,15 @@
 		<?php
 		
 	}
+	
+	function filtros(){
+	
+		?>
+		
+		
+		
+		<?php
+	
+	}
 
 ?>

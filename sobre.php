@@ -32,19 +32,6 @@
 			Nossa aplicação analisa os dados a fim de os relacionar e os exibir em gráficos. Com isso, pode-se apontar se há relação entre os recursos das instituições e suas taxas de aprovação, reprovação e abandono
 			durante o ano letivo.
 		</p>
-		
-		<p>
-		
-			Existem muitos dados nessas bases, então pegamos as de maior relevância como:
-			
-			<ul>
-			
-				<li>Noma da Instituição / Escola;</li>
-				<li></li>
-			
-			</ul>
-		
-		</p>
 	
 	</body>
 

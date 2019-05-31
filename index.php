@@ -15,6 +15,8 @@
 		<meta charset="UTF-8" />
 		<title>Página Inicial</title>
 		
+		<?php bibliotecas(); ?>
+		
 		<?php head_chart(); ?>
 	
 	</head>

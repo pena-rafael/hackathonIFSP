@@ -12,6 +12,8 @@
 	
 		<meta charset="UTF-8" />
 		<title>O que é</title>
+		
+		<?php bibliotecas(); ?>
 	
 	</head>
 	

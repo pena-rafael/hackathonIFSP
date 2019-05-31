@@ -19,6 +19,16 @@
 		
 	}
 	
+	function bibliotecas(){
+	
+		?>
+		
+		
+		
+		<?php
+	
+	}
+	
 	function filtros(){
 	
 		?>

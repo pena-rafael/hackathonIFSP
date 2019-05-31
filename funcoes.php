@@ -197,52 +197,56 @@
 		//echo $sql_tx;
 		$resultado_tx = mysqli_query($link, $sql_tx);
 		
-		$cidades = '(';
-		
-		foreach($resultado_tx as $i=>$v) {
-			$cidade = $v['cod_mun'];
-			if($i==0) {
-				$cidades.="$cidade";
-			} else {
-				$cidades.=",$cidade";
+		if(mysqli_num_rows($resultado_tx)>0) { 
+			$cidades = '(';
+			
+			foreach($resultado_tx as $i=>$v) {
+				$cidade = $v['cod_mun'];
+				if($i==0) {
+					$cidades.="$cidade";
+				} else {
+					$cidades.=",$cidade";
+				}
 			}
+		
+			$cidades.=')';
+		
+			foreach($dados as $i=>$v) {
+				$where = '';
+				
+				if(isset($cidades)) {
+					$where .= "Cod_Municipio IN ".$cidades;
+				}
+				
+				if($where == '') {
+					$dataT = "SELECT count(*) as 'total' FROM escolas";
+					$dataS = "SELECT count(*) as 'cont' FROM escolas WHERE ".$v." LIKE '%S%';";
+				} else {
+					$dataT = "SELECT count(*) as 'total' FROM escolas WHERE $where";
+					$dataS = "SELECT count(*) as 'cont' FROM escolas WHERE $where AND ".$v." LIKE '%S%';";
+				}
+			
+				$resultadoT = mysqli_query($link, $dataT);
+				$resultadoS = mysqli_query($link, $dataS);
+				
+				$porcentagem = (mysqli_fetch_array($resultadoS)['cont']*100)/mysqli_fetch_array($resultadoT)['total'];
+				
+				$resul[$v] = $porcentagem;
+			}
+			
+			//$data = "SELECT * FROM tx_rendimento WHERE Cod_Municipio IN ".$cidades;
+			
+			//$resultado = mysqli_query($link, $data);
+			//$aprovados = mysqli_fetch_array($resultado)['ap_ef'];
+			//$resul["Aprovados"] = $aprovados;
+			
+			
+			$json = json_encode($resul);
+			
+			return $json;
+		} else {
+			return 3;
 		}
-	
-		$cidades.=')';
-		
-		foreach($dados as $i=>$v) {
-			$where = '';
-			
-			if(isset($cidades)) {
-				$where .= "Cod_Municipio IN ".$cidades;
-			}
-			
-			if($where == '') {
-				$dataT = "SELECT count(*) as 'total' FROM escolas";
-				$dataS = "SELECT count(*) as 'cont' FROM escolas WHERE ".$v." LIKE '%S%';";
-			} else {
-				$dataT = "SELECT count(*) as 'total' FROM escolas WHERE $where";
-				$dataS = "SELECT count(*) as 'cont' FROM escolas WHERE $where AND ".$v." LIKE '%S%';";
-			}
-		
-			$resultadoT = mysqli_query($link, $dataT);
-			$resultadoS = mysqli_query($link, $dataS);
-			
-			$porcentagem = (mysqli_fetch_array($resultadoS)['cont']*100)/mysqli_fetch_array($resultadoT)['total'];
-			
-			$resul[$v] = $porcentagem;
-		}
-		
-		//$data = "SELECT * FROM tx_rendimento WHERE Cod_Municipio IN ".$cidades;
-		
-		//$resultado = mysqli_query($link, $data);
-		//$aprovados = mysqli_fetch_array($resultado)['ap_ef'];
-		//$resul["Aprovados"] = $aprovados;
-		
-		
-		$json = json_encode($resul);
-		
-		return $json;
 	}
 
 ?>

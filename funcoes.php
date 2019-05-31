@@ -40,13 +40,49 @@
 		?>
 		<form>
 			<div class="row">
-				<div class="col s3">
-					<div class="row">
-						<div class="input-field col s12">
-							<h5 class="text-center">Taxa de aprovação</h5>
-							<div id="range-aprovados"></div>
-						</div>
-					</div>
+				<div class="input-field col s12">
+					<h5 class="text-center">Taxa de aprovação</h5>
+					<div id="range-aprovados"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s12">
+					<select multiple>
+						<option value="" disabled>Selecione estado(s)</option>
+						<option value="AC">Acre</option>
+						<option value="AL">Alagoas</option>
+						<option value="AP">Amapá</option>
+						<option value="AM">Amazonas</option>
+						<option value="BA">Bahia</option>
+						<option value="CE">Ceará</option>
+						<option value="DF">Distrito Federal</option>
+						<option value="ES">Espírito Santo</option>
+						<option value="GO">Goiás</option>
+						<option value="MA">Maranhão</option>
+						<option value="MT">Mato Grosso</option>
+						<option value="MS">Mato Grosso do Sul</option>
+						<option value="MG">Minas Gerais</option>
+						<option value="PA">Pará</option>
+						<option value="PB">Paraíba</option>
+						<option value="PR">Paraná</option>
+						<option value="PE">Pernambuco</option>
+						<option value="PI">Piauí</option>
+						<option value="RJ">Rio de Janeiro</option>
+						<option value="RS">Rio Grande do Sul</option>
+						<option value="RN">Rio Grando do Norte</option>
+						<option value="RO">Rondônia</option>
+						<option value="RR">Roraima</option>
+						<option value="SC">Santa Catarina</option>
+						<option value="SP">São Paulo</option>
+						<option value="SE">Sergipe</option>
+						<option value="TO">Tocantins</option>
+					</select>
+					<label>Estados</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12">
+					<button type="button" id="aplicar_tx" class="waves-effect waves-light btn blue">Aplicar</button>
 				</div>
 			</div>
 		</form>
@@ -135,6 +171,28 @@
 		
 		$resul = [];
 		
+		if(!isset($filtros['tx_min'])&&!isset($filtros['tx_min'])) {
+			$filtros['tx_min'] = 0;
+			$filtros['tx_max'] = 100;
+		}
+		$estados = '(';
+		if(isset($filtros['estados'])) {
+			
+			foreach($filtros['estados'] as $i=>$v) {
+				if($i==0) {
+					$estados.="$v";
+				} else {
+					$estados.=",$v";
+				}
+			}
+		}
+		$estados.=')';
+		
+		
+		$sql_tx = "SELECT avg(ap_ef) FROM tx_rendimento WHERE UF IN $estados";
+		$resultado_tx = mysqli_query($link, $sql_tx);
+		
+		
 		if(isset($filtros['municipio'])) {
 			$cidades = '(';
 			
@@ -145,9 +203,9 @@
 					$cidades.=",$v";
 				}
 			}
-		}
 		
-		$cidades.=')';
+			$cidades.=')';
+		}
 		
 		foreach($dados as $i=>$v) {
 			$where = '';
@@ -156,8 +214,13 @@
 				$where .= "Cod_Municipio IN ".$cidades;
 			}
 			
-			$dataT = "SELECT count(*) as 'total' FROM escolas WHERE $where";
-			$dataS = "SELECT count(*) as 'cont' FROM escolas WHERE $where AND ".$v." LIKE '%S%';";
+			if($where == '') {
+				$dataT = "SELECT count(*) as 'total' FROM escolas";
+				$dataS = "SELECT count(*) as 'cont' FROM escolas WHERE ".$v." LIKE '%S%';";
+			} else {
+				$dataT = "SELECT count(*) as 'total' FROM escolas WHERE $where";
+				$dataS = "SELECT count(*) as 'cont' FROM escolas WHERE $where AND ".$v." LIKE '%S%';";
+			}
 		
 			$resultadoT = mysqli_query($link, $dataT);
 			$resultadoS = mysqli_query($link, $dataS);
@@ -167,7 +230,7 @@
 			$resul[$v] = $porcentagem;
 		}
 		
-		$data = "SELECT * FROM tx_rendimento WHERE Cod_Municipio IN ".$cidades;
+		//$data = "SELECT * FROM tx_rendimento WHERE Cod_Municipio IN ".$cidades;
 		
 		//$resultado = mysqli_query($link, $data);
 		//$aprovados = mysqli_fetch_array($resultado)['ap_ef'];

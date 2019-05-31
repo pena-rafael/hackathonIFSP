@@ -28,12 +28,20 @@
 		<?php
 		
 			links();
+			
+		?>
+	
+		<div class="container">
+	
+		<?php
 		
 			filtros();
 			
 			body_chart();
 		
 		?>
+		
+		</div>
 	
 	</body>
 

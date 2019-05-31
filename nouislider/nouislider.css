@@ -11,6 +11,7 @@
  * These styles are required for noUiSlider to function.
  * You don't need to change these rules to apply your design.
  */
+ 
 .noUi-target,
 .noUi-target * {
   -webkit-touch-callout: none;
@@ -104,7 +105,7 @@
   border: 1px solid transparent;
 }
 .noUi-connect {
-  background: #26A69A;
+  background: #2196F3;
   -webkit-transition: background 450ms;
   transition: background 450ms;
 }
@@ -193,7 +194,7 @@
   text-align: center;
 }
 .noUi-value-sub {
-  color: #ccc;
+  color: #FFF;
   font-size: 10px;
 }
 
@@ -308,7 +309,7 @@
   height: 15px;
   border-radius: 50%;
   box-shadow: none;
-  background-color: #26A69A;
+  background-color: #FFF;
   border: none;
   left: -5px;
   top: -6px;
@@ -337,7 +338,7 @@
   width: 30px;
   top: -17px;
   left: -2px;
-  background-color: #26A69A;
+  background-color: #2196F3;
   border-radius: 50%;
   transition: border-radius .25s cubic-bezier(0.215, 0.610, 0.355, 1.000),
   transform .25s cubic-bezier(0.215, 0.610, 0.355, 1.000);
@@ -368,7 +369,6 @@
 .noUi-vertical .noUi-tooltip span {
   transform: rotate(135deg);
 }
-
 
 .noUi-target.noUi-vertical .noUi-tooltip {
   position: absolute;

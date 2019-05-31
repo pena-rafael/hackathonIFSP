@@ -9,13 +9,15 @@
 		<script type="text/javascript">
 		
 			var result;
-			
+			document.addEventListener('DOMContentLoaded', function() {
+				var elems = document.querySelectorAll('select');
+				var instances = M.FormSelect.init(elems, 'options');
+			});
 			var dados =[['Tipo', 'Porcentagem']];
 			$(document).ready(function() {
-				
 				var slider = document.getElementById('range-aprovados');
 				noUiSlider.create(slider, {
-					start: [20, 80],
+					start: [0, 100],
 					connect: true,
 					step: 1,
 					orientation: 'horizontal', // 'horizontal' or 'vertical'
